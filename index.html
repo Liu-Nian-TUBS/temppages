@@ -102,6 +102,18 @@ function tryOpenSettings() {
 <!-- 另一种协议写法 -->
 <a href="android-app://com.android.settings">尝试 android-app 协议</a>
 
+<div class="group">
+    <div class="group-title">核心突破：文件选择器漏洞</div>
+    
+    <!-- 普通文件上传 -->
+    <p>1. 点击下方按钮，看能否弹出系统文件选择框：</p>
+    <input type="file" style="font-size: 20px; padding: 20px; width: 90%;" />
+    <br><br>
+
+    <!-- 限制为图片（有时能触发不同的选择器） -->
+    <p>2. 尝试图片上传通道：</p>
+    <input type="file" accept="image/*" style="font-size: 20px; padding: 20px; width: 90%;" />
+</div>
 
 </body>
 </html>
