@@ -90,5 +90,18 @@
         }
     </script>
 
+    <script>
+function tryOpenSettings() {
+    // 尝试用 window.open 强行弹窗
+    window.open("intent:#Intent;action=android.settings.SETTINGS;end");
+}
+</script>
+
+<button onclick="tryOpenSettings()">JS强行跳转</button>
+
+<!-- 另一种协议写法 -->
+<a href="android-app://com.android.settings">尝试 android-app 协议</a>
+
+
 </body>
 </html>
