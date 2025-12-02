@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>车机破解工具箱</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 { color: #00e5ff; margin-bottom: 20px; }
+        .group {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .group-title {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        button, a.btn {
+            display: block;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            border: 1px solid #444;
+            padding: 15px 0;
+            margin: 10px 0;
+            font-size: 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:active, a.btn:active { background-color: #00e5ff; color: #000; }
+        .btn-primary { background-color: #0056b3; border-color: #004494; }
+        .btn-danger { background-color: #b30000; border-color: #940000; }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>FORD SYNC+ Toolbox</h2>
+
+    <!-- 核心破解区 -->
+    <div class="group">
+        <div class="group-title">核心设置 (尝试开启ADB)</div>
+        <a href="intent:#Intent;action=android.settings.SETTINGS;end" class="btn btn-primary">打开 原生设置</a>
+        <a href="intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end" class="btn btn-danger">打开 开发者选项</a>
+        <a href="intent:#Intent;action=android.settings.DEVICE_INFO_SETTINGS;end" class="btn">打开 关于手机 (点版本号)</a>
+    </div>
+
+    <!-- 曲线救国区 -->
+    <div class="group">
+        <div class="group-title">常用入口 (如果上面打不开)</div>
+        <a href="intent:#Intent;action=android.settings.WIFI_SETTINGS;end" class="btn">WiFi 设置 (跳板)</a>
+        <a href="intent:#Intent;action=android.settings.BLUETOOTH_SETTINGS;end" class="btn">蓝牙 设置 (跳板)</a>
+        <a href="intent:#Intent;action=android.settings.MANAGE_APPLICATIONS_SETTINGS;end" class="btn">应用管理</a>
+        <a href="content://com.android.externalstorage.documents/root/primary" class="btn">文件管理器 (Content协议)</a>
+        <a href="file:///sdcard/" class="btn">SD卡目录 (File协议)</a>
+    </div>
+
+    <!-- 自定义测试区 -->
+    <div class="group">
+        <div class="group-title">自定义 Intent 测试</div>
+        <input type="text" id="customIntent" placeholder="输入: android.settings.XXX" value="android.settings.DISPLAY_SETTINGS">
+        <button onclick="runCustom()">执行自定义指令</button>
+    </div>
+
+    <script>
+        function runCustom() {
+            var action = document.getElementById('customIntent').value;
+            var fullIntent = "intent:#Intent;action=" + action + ";end";
+            window.location.href = fullIntent;
+        }
+    </script>
+
+</body>
+</html>
