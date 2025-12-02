@@ -114,6 +114,54 @@ function tryOpenSettings() {
     <p>2. 尝试图片上传通道：</p>
     <input type="file" accept="image/*" style="font-size: 20px; padding: 20px; width: 90%;" />
 </div>
+<div class="group">
+    <div class="group-title">环境侦测</div>
+    <button onclick="scanWindow()">扫描隐藏接口 (结果在下方)</button>
+    <div id="log" style="text-align: left; font-size: 12px; color: #0f0; background: #000; padding: 10px; margin-top: 10px; min-height: 100px; word-break: break-all;">等待扫描...</div>
+</div>
+
+<script>
+    function scanWindow() {
+        var logDiv = document.getElementById('log');
+        logDiv.innerHTML = "开始扫描 window 对象...<br>";
+        
+        var found = [];
+        // 常见的安卓 WebView 注入对象特征
+        var blacklist = ['window', 'self', 'document', 'name', 'location', 'customElements', 'history', 'locationbar', 'menubar', 'personalbar', 'scrollbars', 'statusbar', 'toolbar', 'status', 'closed', 'frames', 'length', 'top', 'opener', 'parent', 'frameElement', 'navigator', 'origin', 'external', 'screen', 'innerWidth', 'innerHeight', 'scrollX', 'pageXOffset', 'scrollY', 'pageYOffset', 'visualViewport', 'screenX', 'screenY', 'outerWidth', 'outerHeight', 'devicePixelRatio', 'clientInformation', 'screenLeft', 'screenTop', 'defaultStatus', 'defaultstatus', 'styleMedia', 'onanimationend', 'onanimationiteration', 'onanimationstart', 'onsearch', 'ontransitionend', 'onwebkitanimationend', 'onwebkitanimationiteration', 'onwebkitanimationstart', 'onwebkittransitionend', 'isSecureContext', 'onabort', 'onblur', 'oncancel', 'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'onclose', 'oncontextmenu', 'oncuechange', 'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus', 'onformdata', 'oninput', 'oninvalid', 'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata', 'onloadstart', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onpause', 'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreset', 'onresize', 'onscroll', 'onseeked', 'onseeking', 'onselect', 'onstalled', 'onsubmit', 'onsuspend', 'ontimeupdate', 'ontoggle', 'onvolumechange', 'onwaiting', 'onwheel', 'onauxclick', 'ongotpointercapture', 'onlostpointercapture', 'onpointerdown', 'onpointermove', 'onpointerup', 'onpointercancel', 'onpointerover', 'onpointerout', 'onpointerenter', 'onpointerleave', 'onselectstart', 'onselectionchange', 'onanimationcancel', 'onpointerrawupdate'];
+
+        for (var prop in window) {
+            if (blacklist.indexOf(prop) === -1) {
+                // 排除掉标准的 JS 对象，剩下的很可能是注入的接口
+                try {
+                    var type = typeof window[prop];
+                    if (type === 'object' || type === 'function') {
+                        found.push(prop);
+                    }
+                } catch(e) {}
+            }
+        }
+
+        if (found.length > 0) {
+            logDiv.innerHTML += "发现潜在注入接口：<br>" + found.join(", ") + "<br><br>";
+            logDiv.innerHTML += "尝试深度分析...<br>";
+            // 尝试打印这些对象里的方法
+            found.forEach(function(objName) {
+                try {
+                    var obj = window[objName];
+                    var methods = [];
+                    for (var m in obj) {
+                        methods.push(m);
+                    }
+                    logDiv.innerHTML += "<strong style='color:yellow'>" + objName + "</strong>: " + methods.join(", ") + "<br>---<br>";
+                } catch(e) {
+                    logDiv.innerHTML += objName + ": 无法读取<br>";
+                }
+            });
+        } else {
+            logDiv.innerHTML += "未发现明显的注入接口。<br>";
+        }
+    }
+</script>
 
 </body>
 </html>
