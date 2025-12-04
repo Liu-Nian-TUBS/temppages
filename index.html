@@ -81,7 +81,11 @@
         <input type="text" id="customIntent" placeholder="输入: android.settings.XXX" value="android.settings.DISPLAY_SETTINGS">
         <button onclick="runCustom()">执行自定义指令</button>
     </div>
-
+    <!-- 尝试调起邮件 -->
+    <a href="mailto:debug@test.com">1. 点击启动邮件 (Mailto)</a>
+    
+    <!-- 尝试调起日历 (部分系统有效) -->
+    <a href="content://com.android.calendar/time/">2. 点击启动日历 (Calendar)</a>
     <script>
         function runCustom() {
             var action = document.getElementById('customIntent').value;
